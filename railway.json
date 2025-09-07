@@ -1,0 +1,27 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd server && npm install && npm run build"
+  },
+  "deploy": {
+    "startCommand": "cd server && npm start",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "NODE_ENV": "production",
+        "PORT": "3000",
+        "MCP_SERVER_NAME": "mcp-minecraft-gui",
+        "MCP_SERVER_VERSION": "1.0.0",
+        "MAX_FILE_SIZE": "10MB",
+        "MAX_SPRITES_PER_ATLAS": "100",
+        "DEFAULT_ATLAS_SIZE": "1024",
+        "LOG_LEVEL": "info",
+        "ENABLE_REQUEST_LOGGING": "true"
+      }
+    }
+  }
+}

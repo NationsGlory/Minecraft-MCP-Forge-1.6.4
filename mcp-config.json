@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "minecraft-gui": {
+      "command": "node",
+      "args": ["server/dist/index.js"],
+      "cwd": "C:/Users/coupaul/Documents/GitHub/Minecraft-MCP-Forge-1.6.4"
+    }
+  }
+}

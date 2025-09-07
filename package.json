@@ -1,0 +1,31 @@
+{
+  "name": "mcp-minecraft-gui-root",
+  "version": "1.0.0",
+  "description": "MCP Minecraft GUI Server - Root configuration for Railway deployment",
+  "private": true,
+  "scripts": {
+    "build": "cd server && npm install && npm run build",
+    "start": "cd server && npm start",
+    "dev": "cd server && npm run dev",
+    "railway:build": "cd server && npm install && npm run build",
+    "railway:start": "cd server && npm start"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4"
+  },
+  "keywords": [
+    "minecraft",
+    "mcp",
+    "gui",
+    "forge",
+    "java7",
+    "spritesheet",
+    "railway"
+  ],
+  "author": "coupaul",
+  "license": "MIT"
+}

@@ -1,0 +1,276 @@
+{
+  "name": "mcp-minecraft-gui",
+  "displayName": "MCP Minecraft GUI Server",
+  "version": "1.0.0",
+  "description": "MCP server pour analyser les spritesheets GUI Minecraft et générer du code Java 7 pour Forge 1.6.4",
+  "author": {
+    "name": "coupaul",
+    "email": "contact@example.com",
+    "url": "https://github.com/coupaul"
+  },
+  "license": "MIT",
+  "homepage": "https://smithery.ai/@coupaul/mcp-minecraft-gui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4"
+  },
+  "bugs": {
+    "url": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4/issues"
+  },
+  "keywords": [
+    "minecraft",
+    "mcp",
+    "gui",
+    "forge",
+    "java7",
+    "spritesheet",
+    "game-development",
+    "modding",
+    "texture-analysis",
+    "code-generation"
+  ],
+  "categories": [
+    "game-development",
+    "code-generation",
+    "image-processing",
+    "minecraft"
+  ],
+  "tags": [
+    "minecraft",
+    "forge",
+    "gui",
+    "spritesheet",
+    "java",
+    "mcp"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  },
+  "tools": [
+    {
+      "name": "analyze_gui_spritesheet",
+      "description": "Analyse une spritesheet GUI PNG et génère un atlas.json avec les sprites détectés",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "Chemin vers le fichier PNG de la spritesheet GUI"
+          },
+          "hints": {
+            "type": "object",
+            "description": "Indices optionnels pour l'analyse",
+            "properties": {
+              "minSpriteSize": { 
+                "type": "number", 
+                "description": "Taille minimale d'un sprite en pixels",
+                "default": 16
+              },
+              "maxSprites": { 
+                "type": "number", 
+                "description": "Nombre maximum de sprites à détecter",
+                "default": 100
+              },
+              "detectStates": { 
+                "type": "boolean", 
+                "description": "Détecter automatiquement les états (hover, pressed, etc.)",
+                "default": true
+              }
+            }
+          }
+        },
+        "required": ["image"]
+      }
+    },
+    {
+      "name": "export_slices",
+      "description": "Exporte les sprites découpés ou crée un atlas packé avec mapping",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "atlas": {
+            "type": "string",
+            "description": "Chemin vers le fichier atlas.json généré"
+          },
+          "packing": {
+            "type": "object",
+            "description": "Options de packing pour l'export",
+            "properties": {
+              "outputDir": { 
+                "type": "string", 
+                "description": "Dossier de sortie pour les sprites",
+                "default": "./exported_sprites"
+              },
+              "packMode": { 
+                "type": "string", 
+                "enum": ["individual", "atlas"],
+                "description": "Mode d'export: individual (fichiers séparés) ou atlas (fichier packé)",
+                "default": "individual"
+              },
+              "maxAtlasSize": { 
+                "type": "number", 
+                "description": "Taille maximale de l'atlas en pixels",
+                "default": 1024
+              }
+            }
+          }
+        },
+        "required": ["atlas"]
+      }
+    },
+    {
+      "name": "generate_java_gui",
+      "description": "Génère du code Java 7 compatible avec Forge 1.6.4",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "atlas": {
+            "type": "string",
+            "description": "Chemin vers le fichier atlas.json"
+          },
+          "target": {
+            "type": "string",
+            "description": "Version cible",
+            "default": "forge-1.6.4"
+          },
+          "package": {
+            "type": "string",
+            "description": "Package Java pour les classes générées"
+          },
+          "screenName": {
+            "type": "string",
+            "description": "Nom de la classe d'écran principale"
+          }
+        },
+        "required": ["atlas", "package", "screenName"]
+      }
+    },
+    {
+      "name": "preview_layout",
+      "description": "Crée une prévisualisation PNG du layout GUI avec les sprites extraits",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "atlas": {
+            "type": "string",
+            "description": "Chemin vers le fichier atlas.json"
+          },
+          "layout": {
+            "type": "object",
+            "description": "Configuration du layout pour la prévisualisation",
+            "properties": {
+              "width": { 
+                "type": "number", 
+                "description": "Largeur de la prévisualisation",
+                "default": 800
+              },
+              "height": { 
+                "type": "number", 
+                "description": "Hauteur de la prévisualisation",
+                "default": 600
+              },
+              "showBounds": { 
+                "type": "boolean", 
+                "description": "Afficher les bordures des sprites",
+                "default": true
+              },
+              "showLabels": { 
+                "type": "boolean", 
+                "description": "Afficher les noms des sprites",
+                "default": true
+              }
+            }
+          }
+        },
+        "required": ["atlas"]
+      }
+    }
+  ],
+  "examples": [
+    {
+      "name": "Analyse d'une spritesheet GUI",
+      "description": "Analyser une spritesheet de menu principal Minecraft",
+      "input": {
+        "tool": "analyze_gui_spritesheet",
+        "arguments": {
+          "image": "textures/gui/main_menu.png",
+          "hints": {
+            "detectStates": true,
+            "minSpriteSize": 16,
+            "maxSprites": 50
+          }
+        }
+      }
+    },
+    {
+      "name": "Génération de code Java",
+      "description": "Générer du code Java 7 pour un mod Forge",
+      "input": {
+        "tool": "generate_java_gui",
+        "arguments": {
+          "atlas": "main_menu_atlas.json",
+          "package": "com.example.mod.gui",
+          "screenName": "GuiMainMenu",
+          "target": "forge-1.6.4"
+        }
+      }
+    },
+    {
+      "name": "Prévisualisation de layout",
+      "description": "Créer une prévisualisation du layout GUI",
+      "input": {
+        "tool": "preview_layout",
+        "arguments": {
+          "atlas": "main_menu_atlas.json",
+          "layout": {
+            "width": 800,
+            "height": 600,
+            "showBounds": true,
+            "showLabels": true
+          }
+        }
+      }
+    }
+  ],
+  "deployment": {
+    "platform": "railway",
+    "url": "https://mcp-minecraft-gui-production.up.railway.app",
+    "healthCheck": "/health",
+    "mcpEndpoint": "/mcp/info"
+  },
+  "requirements": {
+    "node": ">=18.0.0",
+    "memory": "512MB",
+    "storage": "1GB"
+  },
+  "pricing": {
+    "model": "free",
+    "description": "Gratuit pour tous les utilisateurs"
+  },
+  "support": {
+    "documentation": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4/blob/main/DOCUMENTATION.md",
+    "issues": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4/issues",
+    "discussions": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4/discussions"
+  },
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2024-01-01",
+      "changes": [
+        "Version initiale",
+        "Support complet de l'analyse de spritesheets",
+        "Génération de code Java 7 pour Forge 1.6.4",
+        "Outils d'export et de prévisualisation",
+        "Déploiement Railway et intégration Smithery"
+      ]
+    }
+  ],
+  "stats": {
+    "downloads": 0,
+    "stars": 0,
+    "forks": 0,
+    "lastUpdated": "2024-01-01T00:00:00Z"
+  }
+}

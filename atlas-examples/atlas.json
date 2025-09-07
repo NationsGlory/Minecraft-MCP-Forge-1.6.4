@@ -1,0 +1,135 @@
+{
+  "sourceImage": "main_menu.png",
+  "imageWidth": 512,
+  "imageHeight": 512,
+  "sprites": [
+    {
+      "name": "button_main",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 200,
+            "height": 20
+          }
+        },
+        {
+          "name": "hover",
+          "bounds": {
+            "x": 0,
+            "y": 20,
+            "width": 200,
+            "height": 20
+          }
+        },
+        {
+          "name": "pressed",
+          "bounds": {
+            "x": 0,
+            "y": 40,
+            "width": 200,
+            "height": 20
+          }
+        }
+      ],
+      "category": "button"
+    },
+    {
+      "name": "button_small",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 0,
+            "y": 60,
+            "width": 100,
+            "height": 15
+          }
+        },
+        {
+          "name": "hover",
+          "bounds": {
+            "x": 0,
+            "y": 75,
+            "width": 100,
+            "height": 15
+          }
+        }
+      ],
+      "category": "button"
+    },
+    {
+      "name": "panel_background",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 0,
+            "y": 100,
+            "width": 300,
+            "height": 200
+          },
+          "nineSlice": {
+            "top": 10,
+            "right": 10,
+            "bottom": 10,
+            "left": 10
+          }
+        }
+      ],
+      "category": "panel"
+    },
+    {
+      "name": "icon_settings",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 0,
+            "y": 310,
+            "width": 16,
+            "height": 16
+          }
+        }
+      ],
+      "category": "icon"
+    },
+    {
+      "name": "icon_play",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 16,
+            "y": 310,
+            "width": 16,
+            "height": 16
+          }
+        }
+      ],
+      "category": "icon"
+    },
+    {
+      "name": "background_main",
+      "states": [
+        {
+          "name": "normal",
+          "bounds": {
+            "x": 0,
+            "y": 340,
+            "width": 512,
+            "height": 172
+          }
+        }
+      ],
+      "category": "background"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2024-01-01T00:00:00.000Z",
+    "version": "1.0.0",
+    "totalSprites": 6
+  }
+}
