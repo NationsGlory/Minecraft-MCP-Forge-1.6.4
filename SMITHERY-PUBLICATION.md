@@ -36,11 +36,11 @@ Assurez-vous d'avoir ces fichiers :
 #### B. Configuration MCP
 
 1. **Type de serveur** : MCP Server
-2. **URL de déploiement** : `https://votre-projet.up.railway.app`
+2. **URL de déploiement** : `https://minecraft.mcp.coupaul.fr`
 3. **Endpoints** :
-   - **Santé** : `/health`
-   - **Métadonnées** : `/mcp/info`
-   - **Outils** : `/mcp/tools`
+   - **Santé** : `https://minecraft.mcp.coupaul.fr/health`
+   - **Métadonnées** : `https://minecraft.mcp.coupaul.fr/mcp/info`
+   - **Outils** : `https://minecraft.mcp.coupaul.fr/mcp/tools`
 
 #### C. Métadonnées Détaillées
 

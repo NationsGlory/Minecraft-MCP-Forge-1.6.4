@@ -78,15 +78,15 @@ railway up
 ### 1. Endpoints Disponibles
 
 Une fois déployé, votre serveur sera disponible sur :
-- **URL principale** : `https://votre-projet.up.railway.app`
-- **Santé** : `https://votre-projet.up.railway.app/health`
-- **Métadonnées MCP** : `https://votre-projet.up.railway.app/mcp/info`
-- **Outils MCP** : `https://votre-projet.up.railway.app/mcp/tools`
+- **URL principale** : `https://minecraft.mcp.coupaul.fr`
+- **Santé** : `https://minecraft.mcp.coupaul.fr/health`
+- **Métadonnées MCP** : `https://minecraft.mcp.coupaul.fr/mcp/info`
+- **Outils MCP** : `https://minecraft.mcp.coupaul.fr/mcp/tools`
 
 ### 2. Test de Santé
 
 ```bash
-curl https://votre-projet.up.railway.app/health
+curl https://minecraft.mcp.coupaul.fr/health
 ```
 
 Réponse attendue :
@@ -102,7 +102,7 @@ Réponse attendue :
 ### 3. Métadonnées MCP
 
 ```bash
-curl https://votre-projet.up.railway.app/mcp/info
+curl https://minecraft.mcp.coupaul.fr/mcp/info
 ```
 
 ## 📊 Monitoring

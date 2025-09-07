@@ -9,7 +9,7 @@
     "url": "https://github.com/coupaul"
   },
   "license": "MIT",
-  "homepage": "https://smithery.ai/@coupaul/mcp-minecraft-gui",
+  "homepage": "https://minecraft.mcp.coupaul.fr",
   "repository": {
     "type": "git",
     "url": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4"
@@ -236,9 +236,9 @@
   ],
   "deployment": {
     "platform": "railway",
-    "url": "https://mcp-minecraft-gui-production.up.railway.app",
-    "healthCheck": "/health",
-    "mcpEndpoint": "/mcp/info"
+    "url": "https://minecraft.mcp.coupaul.fr",
+    "healthCheck": "https://minecraft.mcp.coupaul.fr/health",
+    "mcpEndpoint": "https://minecraft.mcp.coupaul.fr/mcp/info"
   },
   "requirements": {
     "node": ">=18.0.0",

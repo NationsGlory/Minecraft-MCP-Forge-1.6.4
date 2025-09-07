@@ -28,12 +28,21 @@ Ce projet fournit des outils pour :
 
 ## 🚀 Installation
 
+### Déploiement Local
 ```bash
 cd server
 npm install
 npm run build
 npm start
 ```
+
+### Serveur Live
+Le serveur MCP est disponible en ligne à : **https://minecraft.mcp.coupaul.fr**
+
+**Endpoints disponibles :**
+- 🏥 Santé : https://minecraft.mcp.coupaul.fr/health
+- 📊 Métadonnées MCP : https://minecraft.mcp.coupaul.fr/mcp/info
+- 🛠️ Outils disponibles : https://minecraft.mcp.coupaul.fr/mcp/tools
 
 ## 📂 Structure du Projet
 
