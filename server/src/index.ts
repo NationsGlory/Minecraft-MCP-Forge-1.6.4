@@ -22,7 +22,7 @@ interface Tool {
 const tools: Tool[] = [
   {
     name: 'analyze_gui_spritesheet',
-    description: 'Analyse une spritesheet GUI PNG et génère un atlas.json avec les sprites détectés',
+    description: 'Analyse une spritesheet GUI PNG et génère un atlas.json avec les sprites détectés pour Minecraft MCPC+ 1.6.4',
     inputSchema: {
       type: 'object',
       properties: {
@@ -45,7 +45,7 @@ const tools: Tool[] = [
   },
   {
     name: 'export_slices',
-    description: 'Exporte les sprites découpés ou crée un atlas packé avec mapping',
+    description: 'Exporte les sprites découpés ou crée un atlas packé avec mapping pour Minecraft MCPC+ 1.6.4',
     inputSchema: {
       type: 'object',
       properties: {
@@ -72,7 +72,7 @@ const tools: Tool[] = [
   },
   {
     name: 'generate_java_gui',
-    description: 'Génère du code Java 7 compatible avec Forge 1.6.4',
+    description: 'Génère du code Java 7 compatible avec Minecraft MCPC+ 1.6.4 (Forge)',
     inputSchema: {
       type: 'object',
       properties: {
@@ -82,8 +82,8 @@ const tools: Tool[] = [
         },
         target: {
           type: 'string',
-          description: 'Version cible (forge-1.6.4)',
-          default: 'forge-1.6.4'
+          description: 'Version cible (mcpc-1.6.4)',
+          default: 'mcpc-1.6.4'
         },
         package: {
           type: 'string',
@@ -99,7 +99,7 @@ const tools: Tool[] = [
   },
   {
     name: 'preview_layout',
-    description: 'Crée une prévisualisation PNG du layout GUI avec les sprites extraits',
+    description: 'Crée une prévisualisation PNG du layout GUI avec les sprites extraits pour Minecraft MCPC+ 1.6.4',
     inputSchema: {
       type: 'object',
       properties: {
@@ -132,32 +132,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Route de santé pour Railway
+// Route de santé pour Railway et MCP Hub
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'healthy', 
     timestamp: new Date().toISOString(),
     version: '1.0.0',
-    service: 'mcp-minecraft-gui'
+    service: 'mcp-minecraft-mcpc-1.6.4',
+    description: 'MCP Server pour le développement Minecraft MCPC+ 1.6.4',
+    mcpHubCompatible: true
   });
 });
 
 // Métadonnées du serveur MCP
 app.get('/mcp/info', (req, res) => {
   res.json({
-    name: 'mcp-minecraft-gui',
+    name: 'mcp-minecraft-mcpc-1.6.4',
     version: '1.0.0',
-    description: 'MCP server pour analyser les spritesheets GUI Minecraft et générer du code Java 7 pour Forge 1.6.4',
+    description: 'MCP server pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
     author: 'coupaul',
     repository: 'https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4',
-    homepage: 'https://smithery.ai/@coupaul/mcp-minecraft-gui',
+    homepage: 'https://minecraft.mcp.coupaul.fr',
     tools: tools.map(tool => ({
       name: tool.name,
       description: tool.description
     })),
     capabilities: {
       tools: {},
-    }
+    },
+    mcpHubCompatible: true
   });
 });
 
@@ -172,19 +175,134 @@ app.get('/mcp/tools', (req, res) => {
   });
 });
 
+// Endpoint /api/tools pour MCP Hub Central
+app.get('/api/tools', (req, res) => {
+  res.json({
+    success: true,
+    tools: tools.map(tool => ({
+      name: tool.name,
+      description: tool.description,
+      inputSchema: tool.inputSchema,
+      category: 'minecraft-mcpc-1.6.4',
+      version: '1.0.0'
+    }))
+  });
+});
+
+// Endpoint MCP principal pour MCP Hub Central
+app.post('/mcp', async (req, res) => {
+  try {
+    const { method, params } = req.body;
+    
+    if (method === 'tools/list') {
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id || null,
+        result: {
+          tools: tools.map(tool => ({
+            name: tool.name,
+            description: tool.description,
+            inputSchema: tool.inputSchema
+          }))
+        }
+      });
+    } else if (method === 'tools/call') {
+      const { name, arguments: args } = params;
+      
+      let result;
+      switch (name) {
+        case 'analyze_gui_spritesheet':
+          result = await analyzeGuiSpritesheet(args as { image: string; hints?: any });
+          break;
+        case 'export_slices':
+          result = await exportSlices(args as { atlas: string; packing?: any });
+          break;
+        case 'generate_java_gui':
+          result = await generateJavaGui(args as { atlas: string; target?: string; package: string; screenName: string });
+          break;
+        case 'preview_layout':
+          result = await previewLayout(args as { atlas: string; layout?: any });
+          break;
+        default:
+          throw new Error(`Outil inconnu: ${name}`);
+      }
+      
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id || null,
+        result
+      });
+    } else {
+      res.status(400).json({
+        jsonrpc: '2.0',
+        id: req.body.id || null,
+        error: {
+          code: -32601,
+          message: 'Méthode non trouvée'
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      jsonrpc: '2.0',
+      id: req.body.id || null,
+      error: {
+        code: -32603,
+        message: 'Erreur interne',
+        data: error instanceof Error ? error.message : String(error)
+      }
+    });
+  }
+});
+
+// Configuration MCP pour MCP Hub Central
+app.get('/.well-known/mcp-config', (req, res) => {
+  res.json({
+    name: 'mcp-minecraft-mcpc-1.6.4',
+    version: '1.0.0',
+    description: 'MCP server pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
+    author: 'coupaul',
+    license: 'MIT',
+    homepage: 'https://minecraft.mcp.coupaul.fr',
+    repository: 'https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4',
+    capabilities: {
+      tools: true,
+      resources: false,
+      prompts: false
+    },
+    endpoints: {
+      health: '/health',
+      tools: '/api/tools',
+      mcp: '/mcp',
+      config: '/.well-known/mcp-config'
+    },
+    tools: tools.map(tool => ({
+      name: tool.name,
+      description: tool.description,
+      category: 'minecraft-mcpc-1.6.4'
+    })),
+    mcpHubCompatible: true
+  });
+});
+
 // Route racine avec informations
 app.get('/', (req, res) => {
   res.json({
-    message: 'MCP Minecraft GUI Server',
+    message: 'MCP Minecraft MCPC+ 1.6.4 Server',
     version: '1.0.0',
-    description: 'Serveur MCP pour analyser les spritesheets GUI Minecraft',
+    description: 'Serveur MCP pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
+    mcpHubCompatible: true,
     endpoints: {
       health: '/health',
       mcpInfo: '/mcp/info',
-      tools: '/mcp/tools'
+      tools: '/mcp/tools',
+      apiTools: '/api/tools',
+      mcp: '/mcp',
+      config: '/.well-known/mcp-config'
     },
     usage: {
       mcp: 'Utilisez ce serveur avec un client MCP compatible',
+      mcpHub: 'Compatible avec MCP Hub Central',
       railway: 'Déployé sur Railway',
       smithery: 'Disponible sur Smithery.ai'
     }
@@ -195,7 +313,7 @@ app.get('/', (req, res) => {
 async function createMCPServer() {
   const server = new Server(
     {
-      name: 'mcp-minecraft-gui',
+      name: 'mcp-minecraft-mcpc-1.6.4',
       version: '1.0.0',
     }
   );
@@ -264,7 +382,7 @@ async function main() {
   const transport = new StdioServerTransport();
   await mcpServer.connect(transport);
   
-  console.error('🎮 Serveur MCP Minecraft GUI démarré');
+  console.error('🎮 Serveur MCP Minecraft MCPC+ 1.6.4 démarré');
 }
 
 main().catch((error) => {
