@@ -19,6 +19,7 @@ exported_sprites/
 .idea/
 *.swp
 *.swo
+.claude/
 
 # OS files
 .DS_Store

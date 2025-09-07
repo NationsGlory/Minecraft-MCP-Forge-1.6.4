@@ -197,11 +197,6 @@ async function createMCPServer() {
     {
       name: 'mcp-minecraft-gui',
       version: '1.0.0',
-    },
-    {
-      capabilities: {
-        tools: {},
-      },
     }
   );
 
@@ -223,16 +218,16 @@ async function createMCPServer() {
     try {
       switch (name) {
         case 'analyze_gui_spritesheet':
-          return await analyzeGuiSpritesheet(args);
+          return await analyzeGuiSpritesheet(args as { image: string; hints?: any });
         
         case 'export_slices':
-          return await exportSlices(args);
+          return await exportSlices(args as { atlas: string; packing?: any });
         
         case 'generate_java_gui':
-          return await generateJavaGui(args);
+          return await generateJavaGui(args as { atlas: string; target?: string; package: string; screenName: string });
         
         case 'preview_layout':
-          return await previewLayout(args);
+          return await previewLayout(args as { atlas: string; layout?: any });
         
         default:
           throw new Error(`Outil inconnu: ${name}`);
