@@ -275,4 +275,7 @@ async function main() {
 main().catch((error) => {
   console.error('❌ Erreur fatale:', error);
   process.exit(1);
-});
+});// Fonction pour Smithery - Créer le serveur MCP
+export function create_server() {
+  return createMCPServer;
+}
