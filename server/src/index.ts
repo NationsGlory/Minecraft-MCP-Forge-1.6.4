@@ -370,8 +370,18 @@ async function main() {
   // Démarrer le serveur Express pour Railway
   if (NODE_ENV === 'production') {
     app.listen(PORT, () => {
-      console.log(`🚀 Serveur HTTP démarré sur le port ${PORT}`);
-      console.log(`📊 Métadonnées MCP disponibles sur http://localhost:${PORT}/mcp/info`);
+      console.error(`🚀 Serveur HTTP démarré sur le port ${PORT}`);
+      console.error('');
+      console.error('📊 Endpoints MCP Hub Central disponibles :');
+      console.error('   • /health - Health check');
+      console.error('   • /api/tools - Liste des outils MCP');
+      console.error('   • /mcp - Endpoint MCP principal (JSON-RPC 2.0)');
+      console.error('   • /.well-known/mcp-config - Configuration MCP');
+      console.error('');
+      console.error('📊 Endpoints supplémentaires :');
+      console.error('   • /mcp/info - Métadonnées du serveur');
+      console.error('   • /mcp/tools - Documentation des outils');
+      console.error('   • / - Page d\'accueil avec informations');
     });
   }
 
