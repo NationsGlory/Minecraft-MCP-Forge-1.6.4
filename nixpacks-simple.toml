@@ -1,0 +1,14 @@
+# Configuration Nixpacks simplifiée pour Railway
+# Configuration minimale pour éviter les erreurs Nix
+
+[phases.setup]
+nixPkgs = ["nodejs"]
+
+[phases.install]
+cmds = ["cd server && npm install"]
+
+[phases.build]
+cmds = ["cd server && npm run build"]
+
+[start]
+cmd = "cd server && npm start"
