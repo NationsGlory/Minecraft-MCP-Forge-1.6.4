@@ -367,7 +367,16 @@ app.post('/', async (req, res) => {
           result: {
             protocolVersion: '2024-11-05',
             capabilities: {
-              tools: {}
+              tools: {
+                listChanged: false
+              },
+              resources: {
+                subscribe: false,
+                listChanged: false
+              },
+              prompts: {
+                listChanged: false
+              }
             },
             serverInfo: {
               name: 'mcp-minecraft-mcpc-1.6.4',
@@ -397,7 +406,16 @@ app.post('/', async (req, res) => {
           id: responseId,
           result: {
             capabilities: {
-              tools: {}
+              tools: {
+                listChanged: false
+              },
+              resources: {
+                subscribe: false,
+                listChanged: false
+              },
+              prompts: {
+                listChanged: false
+              }
             }
           }
         });
