@@ -390,6 +390,46 @@ app.post('/', async (req, res) => {
         // Notification MCP - pas de réponse nécessaire
         console.error('Notification MCP reçue: notifications/cancelled');
         res.status(204).send(); // No Content pour les notifications
+      } else if (method === 'capabilities') {
+        // Méthode capabilities MCP
+        res.json({
+          jsonrpc: '2.0',
+          id: responseId,
+          result: {
+            capabilities: {
+              tools: {}
+            }
+          }
+        });
+      } else if (method === 'server/info') {
+        // Méthode server/info MCP
+        res.json({
+          jsonrpc: '2.0',
+          id: responseId,
+          result: {
+            name: 'mcp-minecraft-mcpc-1.6.4',
+            version: '1.0.0',
+            description: 'MCP server pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)'
+          }
+        });
+      } else if (method === 'resources/list') {
+        // Méthode resources/list MCP
+        res.json({
+          jsonrpc: '2.0',
+          id: responseId,
+          result: {
+            resources: []
+          }
+        });
+      } else if (method === 'prompts/list') {
+        // Méthode prompts/list MCP
+        res.json({
+          jsonrpc: '2.0',
+          id: responseId,
+          result: {
+            prompts: []
+          }
+        });
       } else {
         // Log de la méthode inconnue pour debugging
         console.error('Méthode JSON-RPC inconnue:', method, 'ID:', id);
@@ -400,7 +440,7 @@ app.post('/', async (req, res) => {
             code: -32601,
             message: `Méthode non trouvée: ${method}`,
             data: {
-              supportedMethods: ['tools/list', 'tools/call', 'initialize', 'ping'],
+              supportedMethods: ['tools/list', 'tools/call', 'initialize', 'ping', 'capabilities', 'server/info', 'resources/list', 'prompts/list'],
               supportedNotifications: ['notifications/initialized', 'notifications/cancelled']
             }
           }
