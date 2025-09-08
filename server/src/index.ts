@@ -382,6 +382,14 @@ app.post('/', async (req, res) => {
           id: responseId,
           result: { pong: true }
         });
+      } else if (method === 'notifications/initialized') {
+        // Notification MCP - pas de réponse nécessaire
+        console.error('Notification MCP reçue: notifications/initialized');
+        res.status(204).send(); // No Content pour les notifications
+      } else if (method === 'notifications/cancelled') {
+        // Notification MCP - pas de réponse nécessaire
+        console.error('Notification MCP reçue: notifications/cancelled');
+        res.status(204).send(); // No Content pour les notifications
       } else {
         // Log de la méthode inconnue pour debugging
         console.error('Méthode JSON-RPC inconnue:', method, 'ID:', id);
@@ -392,7 +400,8 @@ app.post('/', async (req, res) => {
             code: -32601,
             message: `Méthode non trouvée: ${method}`,
             data: {
-              supportedMethods: ['tools/list', 'tools/call', 'initialize', 'ping']
+              supportedMethods: ['tools/list', 'tools/call', 'initialize', 'ping'],
+              supportedNotifications: ['notifications/initialized', 'notifications/cancelled']
             }
           }
         });
