@@ -316,11 +316,14 @@ app.post('/', async (req, res) => {
     // Traiter comme une requête MCP normale
     const { method, params, id } = req.body;
     
+    // Générer un ID par défaut si null ou undefined
+    const responseId = id !== undefined ? id : 1;
+    
     try {
       if (method === 'tools/list') {
         res.json({
           jsonrpc: '2.0',
-          id: id || null,
+          id: responseId,
           result: {
             tools: tools.map(tool => ({
               name: tool.name,
@@ -353,14 +356,14 @@ app.post('/', async (req, res) => {
 
         res.json({
           jsonrpc: '2.0',
-          id: id || null,
+          id: responseId,
           result
         });
       } else if (method === 'initialize') {
         // Méthode d'initialisation MCP
         res.json({
           jsonrpc: '2.0',
-          id: id || null,
+          id: responseId,
           result: {
             protocolVersion: '2024-11-05',
             capabilities: {
@@ -376,15 +379,15 @@ app.post('/', async (req, res) => {
         // Méthode ping simple
         res.json({
           jsonrpc: '2.0',
-          id: id || null,
+          id: responseId,
           result: { pong: true }
         });
       } else {
         // Log de la méthode inconnue pour debugging
-        console.error('Méthode JSON-RPC inconnue:', method);
+        console.error('Méthode JSON-RPC inconnue:', method, 'ID:', id);
         res.status(400).json({
           jsonrpc: '2.0',
-          id: id || null,
+          id: responseId,
           error: {
             code: -32601,
             message: `Méthode non trouvée: ${method}`,
@@ -397,7 +400,7 @@ app.post('/', async (req, res) => {
     } catch (error) {
       res.status(500).json({
         jsonrpc: '2.0',
-        id: id || null,
+        id: responseId,
         error: {
           code: -32603,
           message: 'Erreur interne',
