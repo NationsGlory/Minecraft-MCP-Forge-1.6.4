@@ -1,8 +1,13 @@
 # Dockerfile optimisé pour MCP Minecraft MCPC+ 1.6.4 Server
+# Build timestamp: $(date +%s) - Force cache invalidation
 FROM node:18-alpine
 
 # Installer les outils nécessaires
 RUN apk add --no-cache git
+
+# Créer un utilisateur non-root pour éviter les problèmes de permissions
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -10,8 +15,8 @@ WORKDIR /app
 # Copier les fichiers de configuration racine
 COPY package.json package-lock.json ./
 
-# Installer les dépendances racines (si nécessaire)
-RUN npm ci --only=production
+# Installer les dépendances racines
+RUN npm ci --include=dev
 
 # Copier le code source racine
 COPY . .
@@ -28,11 +33,15 @@ RUN npm ci --include=dev
 # Copier le code source du serveur
 COPY server/ .
 
-# Vérifier que TypeScript est installé
+# Vérifier que TypeScript est installé et accessible
 RUN npx tsc --version
 
-# Compiler le TypeScript
-RUN npm run build
+# Vérifier les permissions des fichiers
+RUN ls -la node_modules/.bin/tsc
+
+# Compiler le TypeScript avec permissions explicites
+RUN chmod +x node_modules/.bin/tsc && \
+    npm run build
 
 # Vérifier que le build a réussi
 RUN ls -la dist/
@@ -56,4 +65,3 @@ ENV ENABLE_REQUEST_LOGGING=true
 
 # Commande de démarrage
 CMD ["npm", "start"]
-# Build timestamp: 1757303824
