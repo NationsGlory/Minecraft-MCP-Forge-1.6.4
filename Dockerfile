@@ -1,13 +1,9 @@
-# Dockerfile optimisé pour MCP Minecraft MCPC+ 1.6.4 Server
-# Build timestamp: $(date +%s) - Force cache invalidation
-FROM node:18-alpine
+# Dockerfile multi-stage pour MCP Minecraft MCPC+ 1.6.4 Server
+# Build timestamp: 1757307438 - Force cache invalidation complète
+FROM node:18-alpine AS builder
 
 # Installer les outils nécessaires
 RUN apk add --no-cache git
-
-# Créer un utilisateur non-root pour éviter les problèmes de permissions
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -21,7 +17,7 @@ RUN npm ci --include=dev
 # Copier le code source racine
 COPY . .
 
-# Aller dans le dossier server
+# Aller dans le dossier server pour le build
 WORKDIR /app/server
 
 # Copier les fichiers de configuration du serveur
@@ -33,18 +29,44 @@ RUN npm ci --include=dev
 # Copier le code source du serveur
 COPY server/ .
 
-# Vérifier que TypeScript est installé et accessible
+# Vérifier que TypeScript est installé
 RUN npx tsc --version
 
-# Vérifier les permissions des fichiers
-RUN ls -la node_modules/.bin/tsc
-
-# Compiler le TypeScript avec permissions explicites
-RUN chmod +x node_modules/.bin/tsc && \
-    npm run build
+# Compiler le TypeScript
+RUN npm run build
 
 # Vérifier que le build a réussi
 RUN ls -la dist/
+
+# Stage de production
+FROM node:18-alpine AS production
+
+# Installer les outils nécessaires
+RUN apk add --no-cache git
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers de configuration racine
+COPY package.json package-lock.json ./
+
+# Installer les dépendances racines (production seulement)
+RUN npm ci --only=production
+
+# Copier le code source racine
+COPY . .
+
+# Aller dans le dossier server
+WORKDIR /app/server
+
+# Copier les fichiers de configuration du serveur
+COPY server/package.json server/package-lock.json ./
+
+# Installer les dépendances de production seulement
+RUN npm ci --only=production
+
+# Copier les fichiers compilés depuis le stage builder
+COPY --from=builder /app/server/dist ./dist
 
 # Retourner au répertoire racine
 WORKDIR /app
