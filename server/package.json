@@ -1,6 +1,6 @@
 {
   "name": "mcp-minecraft-mcpc-1.6.4",
-  "version": "1.0.0",
+  "version": "3.7.0",
   "description": "MCP server pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)",
   "main": "dist/index.js",
   "type": "module",

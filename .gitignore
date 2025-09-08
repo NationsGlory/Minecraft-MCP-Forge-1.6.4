@@ -1,66 +1,143 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Gitignore commun pour les projets MCP
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Build outputs
-server/dist/
-*.tsbuildinfo
+# PyInstaller
+*.manifest
+*.spec
 
-# Generated files
-exported_sprites/
-*_atlas.json
-*_preview.png
-*_layout_report.txt
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# IDE files
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-.claude/
+*~
 
-# OS files
+# OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Logs
 logs/
 *.log
 
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
+# Data
+data/
+*.db
+*.sqlite
 
-# Coverage directory used by tools like istanbul
-coverage/
+# Config
+config/local/
+config/production/
 
-# nyc test coverage
-.nyc_output
+# Docker
+.dockerignore
+docker-compose.override.yml
 
-# Dependency directories
-jspm_packages/
+# Railway
+.railway/
+railway.json
 
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env
-.env.test
-.env.production
-
-# Temporary folders
+# Temporary files
 tmp/
 temp/
+*.tmp
+*.temp

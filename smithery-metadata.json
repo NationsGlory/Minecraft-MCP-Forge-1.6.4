@@ -1,12 +1,12 @@
 {
-  "name": "mcp-minecraft-gui",
-  "displayName": "MCP Minecraft GUI Server",
-  "version": "1.0.0",
+  "name": "minecraft-mcp-mcpc-1.6.4",
+  "displayName": "Minecraft MCPC+ 1.6.4 Server",
+  "version": "3.7.0",
   "description": "MCP server pour analyser les spritesheets GUI Minecraft et générer du code Java 7 pour Forge 1.6.4",
   "author": {
     "name": "coupaul",
-    "email": "contact@example.com",
-    "url": "https://github.com/coupaul"
+    "email": "contact@coupaul.fr",
+    "url": "https://github.com/coupaul/Minecraft-MCP-Forge-1.6.4"
   },
   "license": "MIT",
   "homepage": "https://minecraft.mcp.coupaul.fr",
@@ -20,14 +20,17 @@
   "keywords": [
     "minecraft",
     "mcp",
-    "gui",
+    "mcpc",
     "forge",
     "java7",
     "spritesheet",
+    "gui",
     "game-development",
     "modding",
     "texture-analysis",
-    "code-generation"
+    "code-generation",
+    "railway",
+    "smithery"
   ],
   "categories": [
     "game-development",
@@ -41,7 +44,9 @@
     "gui",
     "spritesheet",
     "java",
-    "mcp"
+    "mcp",
+    "mcpc",
+    "1.6.4"
   ],
   "capabilities": {
     "tools": true,
@@ -63,25 +68,27 @@
             "type": "object",
             "description": "Indices optionnels pour l'analyse",
             "properties": {
-              "minSpriteSize": { 
-                "type": "number", 
+              "minSpriteSize": {
+                "type": "number",
                 "description": "Taille minimale d'un sprite en pixels",
                 "default": 16
               },
-              "maxSprites": { 
-                "type": "number", 
+              "maxSprites": {
+                "type": "number",
                 "description": "Nombre maximum de sprites à détecter",
                 "default": 100
               },
-              "detectStates": { 
-                "type": "boolean", 
+              "detectStates": {
+                "type": "boolean",
                 "description": "Détecter automatiquement les états (hover, pressed, etc.)",
                 "default": true
               }
             }
           }
         },
-        "required": ["image"]
+        "required": [
+          "image"
+        ]
       }
     },
     {
@@ -98,26 +105,31 @@
             "type": "object",
             "description": "Options de packing pour l'export",
             "properties": {
-              "outputDir": { 
-                "type": "string", 
+              "outputDir": {
+                "type": "string",
                 "description": "Dossier de sortie pour les sprites",
                 "default": "./exported_sprites"
               },
-              "packMode": { 
-                "type": "string", 
-                "enum": ["individual", "atlas"],
+              "packMode": {
+                "type": "string",
+                "enum": [
+                  "individual",
+                  "atlas"
+                ],
                 "description": "Mode d'export: individual (fichiers séparés) ou atlas (fichier packé)",
                 "default": "individual"
               },
-              "maxAtlasSize": { 
-                "type": "number", 
+              "maxAtlasSize": {
+                "type": "number",
                 "description": "Taille maximale de l'atlas en pixels",
                 "default": 1024
               }
             }
           }
         },
-        "required": ["atlas"]
+        "required": [
+          "atlas"
+        ]
       }
     },
     {
@@ -144,7 +156,11 @@
             "description": "Nom de la classe d'écran principale"
           }
         },
-        "required": ["atlas", "package", "screenName"]
+        "required": [
+          "atlas",
+          "package",
+          "screenName"
+        ]
       }
     },
     {
@@ -161,30 +177,32 @@
             "type": "object",
             "description": "Configuration du layout pour la prévisualisation",
             "properties": {
-              "width": { 
-                "type": "number", 
+              "width": {
+                "type": "number",
                 "description": "Largeur de la prévisualisation",
                 "default": 800
               },
-              "height": { 
-                "type": "number", 
+              "height": {
+                "type": "number",
                 "description": "Hauteur de la prévisualisation",
                 "default": 600
               },
-              "showBounds": { 
-                "type": "boolean", 
+              "showBounds": {
+                "type": "boolean",
                 "description": "Afficher les bordures des sprites",
                 "default": true
               },
-              "showLabels": { 
-                "type": "boolean", 
+              "showLabels": {
+                "type": "boolean",
                 "description": "Afficher les noms des sprites",
                 "default": true
               }
             }
           }
         },
-        "required": ["atlas"]
+        "required": [
+          "atlas"
+        ]
       }
     }
   ],
@@ -238,7 +256,7 @@
     "platform": "railway",
     "url": "https://minecraft.mcp.coupaul.fr",
     "healthCheck": "https://minecraft.mcp.coupaul.fr/health",
-    "mcpEndpoint": "https://minecraft.mcp.coupaul.fr/mcp/info"
+    "mcpEndpoint": "https://minecraft.mcp.coupaul.fr/mcp"
   },
   "requirements": {
     "node": ">=18.0.0",
@@ -256,14 +274,14 @@
   },
   "changelog": [
     {
-      "version": "1.0.0",
-      "date": "2024-01-01",
+      "version": "3.7.0",
+      "date": "2025-01-08",
       "changes": [
-        "Version initiale",
+        "Version standardisée pour cohérence avec les autres projets",
         "Support complet de l'analyse de spritesheets",
         "Génération de code Java 7 pour Forge 1.6.4",
         "Outils d'export et de prévisualisation",
-        "Déploiement Railway et intégration Smithery"
+        "Déploiement Railway et intégration Smithery optimisée"
       ]
     }
   ],
@@ -271,6 +289,6 @@
     "downloads": 0,
     "stars": 0,
     "forks": 0,
-    "lastUpdated": "2024-01-01T00:00:00Z"
+    "lastUpdated": "2025-01-08T00:00:00Z"
   }
 }
