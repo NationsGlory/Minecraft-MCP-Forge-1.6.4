@@ -311,6 +311,9 @@ app.get('/', (req, res) => {
 
 // Endpoint POST pour Smithery (JSON-RPC 2.0 compatible)
 app.post('/', async (req, res) => {
+  // Log complet de la requête pour debugging
+  console.error('🔍 Requête Smithery:', JSON.stringify(req.body, null, 2));
+  
   // Vérifier si c'est une requête JSON-RPC 2.0
   if (req.body && req.body.jsonrpc === '2.0') {
     // Traiter comme une requête MCP normale
@@ -319,9 +322,11 @@ app.post('/', async (req, res) => {
     // Générer un ID par défaut si null ou undefined
     const responseId = id !== undefined ? id : 1;
     
+    console.error('📋 Méthode:', method, 'ID:', id, 'Params:', params);
+    
     try {
       if (method === 'tools/list') {
-        res.json({
+        const response = {
           jsonrpc: '2.0',
           id: responseId,
           result: {
@@ -331,7 +336,9 @@ app.post('/', async (req, res) => {
               inputSchema: tool.inputSchema
             }))
           }
-        });
+        };
+        console.error('📤 Réponse tools/list:', JSON.stringify(response, null, 2));
+        res.json(response);
       } else if (method === 'tools/call') {
         // Gérer les appels d'outils directement
         const { name, arguments: args } = params || {};
@@ -361,7 +368,7 @@ app.post('/', async (req, res) => {
         });
       } else if (method === 'initialize') {
         // Méthode d'initialisation MCP
-        res.json({
+        const response = {
           jsonrpc: '2.0',
           id: responseId,
           result: {
@@ -383,7 +390,9 @@ app.post('/', async (req, res) => {
               version: '1.0.0'
             }
           }
-        });
+        };
+        console.error('📤 Réponse initialize:', JSON.stringify(response, null, 2));
+        res.json(response);
       } else if (method === 'ping') {
         // Méthode ping simple
         res.json({
