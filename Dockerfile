@@ -1,5 +1,8 @@
-# Dockerfile pour MCP Minecraft MCPC+ 1.6.4 Server
+# Dockerfile optimisé pour MCP Minecraft MCPC+ 1.6.4 Server
 FROM node:18-alpine
+
+# Installer les outils nécessaires
+RUN apk add --no-cache git
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -10,23 +13,29 @@ COPY package.json package-lock.json ./
 # Installer les dépendances racines (si nécessaire)
 RUN npm ci --only=production
 
-# Copier le code source
+# Copier le code source racine
 COPY . .
 
-# Aller dans le dossier server et installer les dépendances
+# Aller dans le dossier server
 WORKDIR /app/server
 
 # Copier les fichiers de configuration du serveur
 COPY server/package.json server/package-lock.json ./
 
-# Installer les dépendances du serveur (incluant devDependencies pour TypeScript)
-RUN npm ci
+# Installer TOUTES les dépendances (production + dev pour TypeScript)
+RUN npm ci --include=dev
 
 # Copier le code source du serveur
 COPY server/ .
 
+# Vérifier que TypeScript est installé
+RUN npx tsc --version
+
 # Compiler le TypeScript
 RUN npm run build
+
+# Vérifier que le build a réussi
+RUN ls -la dist/
 
 # Retourner au répertoire racine
 WORKDIR /app
@@ -47,3 +56,4 @@ ENV ENABLE_REQUEST_LOGGING=true
 
 # Commande de démarrage
 CMD ["npm", "start"]
+# Build timestamp: 1757303824
