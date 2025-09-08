@@ -310,41 +310,98 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint POST pour Smithery (JSON-RPC 2.0 compatible)
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
   // Vérifier si c'est une requête JSON-RPC 2.0
   if (req.body && req.body.jsonrpc === '2.0') {
     // Traiter comme une requête MCP normale
     const { method, params, id } = req.body;
     
-    if (method === 'tools/list') {
-      res.json({
-        jsonrpc: '2.0',
-        id: id || null,
-        result: {
-          tools: tools.map(tool => ({
-            name: tool.name,
-            description: tool.description,
-            inputSchema: tool.inputSchema
-          }))
+    try {
+      if (method === 'tools/list') {
+        res.json({
+          jsonrpc: '2.0',
+          id: id || null,
+          result: {
+            tools: tools.map(tool => ({
+              name: tool.name,
+              description: tool.description,
+              inputSchema: tool.inputSchema
+            }))
+          }
+        });
+      } else if (method === 'tools/call') {
+        // Gérer les appels d'outils directement
+        const { name, arguments: args } = params || {};
+        
+        let result;
+        switch (name) {
+          case 'analyze_gui_spritesheet':
+            result = await analyzeGuiSpritesheet(args as { image: string; hints?: any });
+            break;
+          case 'export_slices':
+            result = await exportSlices(args as { atlas: string; packing?: any });
+            break;
+          case 'generate_java_gui':
+            result = await generateJavaGui(args as { atlas: string; target?: string; package: string; screenName: string });
+            break;
+          case 'preview_layout':
+            result = await previewLayout(args as { atlas: string; layout?: any });
+            break;
+          default:
+            throw new Error(`Outil inconnu: ${name}`);
         }
-      });
-    } else if (method === 'tools/call') {
-      // Rediriger vers l'endpoint /mcp pour les appels d'outils
-      res.status(400).json({
+
+        res.json({
+          jsonrpc: '2.0',
+          id: id || null,
+          result
+        });
+      } else if (method === 'initialize') {
+        // Méthode d'initialisation MCP
+        res.json({
+          jsonrpc: '2.0',
+          id: id || null,
+          result: {
+            protocolVersion: '2024-11-05',
+            capabilities: {
+              tools: {}
+            },
+            serverInfo: {
+              name: 'mcp-minecraft-mcpc-1.6.4',
+              version: '1.0.0'
+            }
+          }
+        });
+      } else if (method === 'ping') {
+        // Méthode ping simple
+        res.json({
+          jsonrpc: '2.0',
+          id: id || null,
+          result: { pong: true }
+        });
+      } else {
+        // Log de la méthode inconnue pour debugging
+        console.error('Méthode JSON-RPC inconnue:', method);
+        res.status(400).json({
+          jsonrpc: '2.0',
+          id: id || null,
+          error: {
+            code: -32601,
+            message: `Méthode non trouvée: ${method}`,
+            data: {
+              supportedMethods: ['tools/list', 'tools/call', 'initialize', 'ping']
+            }
+          }
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
         jsonrpc: '2.0',
         id: id || null,
         error: {
-          code: -32601,
-          message: 'Utilisez l\'endpoint /mcp pour les appels d\'outils'
-        }
-      });
-    } else {
-      res.status(400).json({
-        jsonrpc: '2.0',
-        id: id || null,
-        error: {
-          code: -32601,
-          message: 'Méthode non trouvée'
+          code: -32603,
+          message: 'Erreur interne',
+          data: error instanceof Error ? error.message : String(error)
         }
       });
     }
