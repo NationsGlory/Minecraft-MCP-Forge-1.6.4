@@ -309,29 +309,69 @@ app.get('/', (req, res) => {
   });
 });
 
-// Endpoint POST pour Smithery
+// Endpoint POST pour Smithery (JSON-RPC 2.0 compatible)
 app.post('/', (req, res) => {
-  res.json({
-    message: 'MCP Minecraft MCPC+ 1.6.4 Server',
-    version: '1.0.0',
-    description: 'Serveur MCP pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
-    mcpHubCompatible: true,
-    smitheryCompatible: true,
-    endpoints: {
-      health: '/health',
-      mcpInfo: '/mcp/info',
-      tools: '/mcp/tools',
-      apiTools: '/api/tools',
-      mcp: '/mcp',
-      config: '/.well-known/mcp-config'
-    },
-    usage: {
-      mcp: 'Utilisez ce serveur avec un client MCP compatible',
-      mcpHub: 'Compatible avec MCP Hub Central',
-      railway: 'Déployé sur Railway',
-      smithery: 'Disponible sur Smithery.ai'
+  // Vérifier si c'est une requête JSON-RPC 2.0
+  if (req.body && req.body.jsonrpc === '2.0') {
+    // Traiter comme une requête MCP normale
+    const { method, params, id } = req.body;
+    
+    if (method === 'tools/list') {
+      res.json({
+        jsonrpc: '2.0',
+        id: id || null,
+        result: {
+          tools: tools.map(tool => ({
+            name: tool.name,
+            description: tool.description,
+            inputSchema: tool.inputSchema
+          }))
+        }
+      });
+    } else if (method === 'tools/call') {
+      // Rediriger vers l'endpoint /mcp pour les appels d'outils
+      res.status(400).json({
+        jsonrpc: '2.0',
+        id: id || null,
+        error: {
+          code: -32601,
+          message: 'Utilisez l\'endpoint /mcp pour les appels d\'outils'
+        }
+      });
+    } else {
+      res.status(400).json({
+        jsonrpc: '2.0',
+        id: id || null,
+        error: {
+          code: -32601,
+          message: 'Méthode non trouvée'
+        }
+      });
     }
-  });
+  } else {
+    // Réponse simple pour les requêtes non-JSON-RPC
+    res.json({
+      message: 'MCP Minecraft MCPC+ 1.6.4 Server',
+      version: '1.0.0',
+      description: 'Serveur MCP pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
+      mcpHubCompatible: true,
+      smitheryCompatible: true,
+      endpoints: {
+        health: '/health',
+        mcpInfo: '/mcp/info',
+        tools: '/mcp/tools',
+        apiTools: '/api/tools',
+        mcp: '/mcp',
+        config: '/.well-known/mcp-config'
+      },
+      usage: {
+        mcp: 'Utilisez ce serveur avec un client MCP compatible',
+        mcpHub: 'Compatible avec MCP Hub Central',
+        railway: 'Déployé sur Railway',
+        smithery: 'Disponible sur Smithery.ai'
+      }
+    });
+  }
 });
 
 // Fonction principale MCP
