@@ -309,6 +309,31 @@ app.get('/', (req, res) => {
   });
 });
 
+// Endpoint POST pour Smithery
+app.post('/', (req, res) => {
+  res.json({
+    message: 'MCP Minecraft MCPC+ 1.6.4 Server',
+    version: '1.0.0',
+    description: 'Serveur MCP pour le développement Minecraft MCPC+ 1.6.4 (GUI, mods, outils)',
+    mcpHubCompatible: true,
+    smitheryCompatible: true,
+    endpoints: {
+      health: '/health',
+      mcpInfo: '/mcp/info',
+      tools: '/mcp/tools',
+      apiTools: '/api/tools',
+      mcp: '/mcp',
+      config: '/.well-known/mcp-config'
+    },
+    usage: {
+      mcp: 'Utilisez ce serveur avec un client MCP compatible',
+      mcpHub: 'Compatible avec MCP Hub Central',
+      railway: 'Déployé sur Railway',
+      smithery: 'Disponible sur Smithery.ai'
+    }
+  });
+});
+
 // Fonction principale MCP
 async function createMCPServer() {
   const server = new Server(
@@ -381,7 +406,7 @@ async function main() {
       console.error('📊 Endpoints supplémentaires :');
       console.error('   • /mcp/info - Métadonnées du serveur');
       console.error('   • /mcp/tools - Documentation des outils');
-      console.error('   • / - Page d\'accueil avec informations');
+      console.error('   • / (GET/POST) - Page d\'accueil avec informations');
     });
   }
 
